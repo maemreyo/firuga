@@ -1,14 +1,15 @@
-[package]
-name = "prj"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+resolver = "2"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+members = [
+	"main",
+	"shared"
+]
 
-[dependencies]
-# reqwest = { version = "0.11.12", features = ['json'] }
-# serde = { version = "1.0.147", features = ["derive"] }
-# tokio = { version = "1.21.2", features = ["full"] }
-# anyhow = "1.0.66"
-# log = "0.4.17"
-# dotenv = "0.15.0"
+# Enable a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
