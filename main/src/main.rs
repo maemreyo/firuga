@@ -1,4 +1,6 @@
+use bevy::log::LogPlugin;
 use bevy::prelude::*;
+use bevy_inspector_egui::WorldInspectorPlugin;
 
 #[derive(Component)]
 struct Person;
@@ -7,10 +9,24 @@ struct Person;
 struct Name(String);
 
 fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(HelloPlugin)
-        .run();
+    let mut app = App::new();
+    // * Add LogPlugin
+    app.add_plugins_with(
+        DefaultPlugins,
+        |plugins| plugins.disable::<LogPlugin>(),
+    );
+    // bevy_mod_debugdump::print_render_graph(
+    //     &mut app,
+    // );
+
+    // * Add Inspector Plugin
+    app.add_plugin(WorldInspectorPlugin::new());
+
+    // * Add our own plugin here!
+    app.add_plugin(HelloPlugin);
+
+    // * Run app
+    app.run();
 }
 
 pub struct HelloPlugin;
@@ -24,10 +40,6 @@ impl Plugin for HelloPlugin {
         .add_startup_system(add_people)
         .add_system(greet_people);
     }
-}
-
-fn hello_world() {
-    println!("hello world!");
 }
 
 fn add_people(mut commands: Commands) {
